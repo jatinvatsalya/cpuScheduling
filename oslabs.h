@@ -24,4 +24,9 @@ struct PCB handle_process_arrival_pp(
     struct PCB new_process,
     int timestamp);
 
+struct PCB handle_process_completion_pp(
+    struct PCB ready_queue[QUEUEMAX],
+    int *queue_cnt,
+    int timestamp);
+
 #endif // OSLABS_H_INCLUDED
