@@ -29,4 +29,16 @@ struct PCB handle_process_completion_pp(
     int *queue_cnt,
     int timestamp);
 
+struct PCB handle_process_arrival_srtp(
+    struct PCB ready_queue[QUEUEMAX],
+    int *queue_cnt,
+    struct PCB current_process,
+    struct PCB new_process,
+    int time_stamp);
+
+struct PCB handle_process_completion_srtp(
+    struct PCB ready_queue[QUEUEMAX],
+    int *queue_cnt,
+    int timestamp);
+
 #endif // OSLABS_H_INCLUDED
