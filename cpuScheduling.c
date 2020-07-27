@@ -16,7 +16,6 @@ struct PCB handle_process_arrival_pp(
 {
     int iAdded;
     struct PCB result = {0, 0, 0, 0, 0, 0, 0};
-
     if ( isNullPcb(current_process) )
     {
         memcpy( &result, &new_process, sizeof( struct PCB ) );
@@ -31,7 +30,6 @@ struct PCB handle_process_arrival_pp(
         ready_queue[iAdded].execution_starttime = 0;
         ready_queue[iAdded].execution_endtime = 0;
         ready_queue[iAdded].remaining_bursttime = ready_queue[iAdded].total_bursttime;
-        ++(*queue_cnt);
     }
     else
     {
@@ -41,8 +39,7 @@ struct PCB handle_process_arrival_pp(
         result.execution_endtime = timestamp + result.total_bursttime;
         result.remaining_bursttime = result.total_bursttime;
         ready_queue[iAdded].execution_endtime = 0;
-        ready_queue[iAdded].remaining_bursttime = ready_queue[iAdded].total_bursttime;
-        ++(*queue_cnt);
+    //    ready_queue[iAdded].remaining_bursttime = ready_queue[iAdded].total_bursttime;
     }
 
     return result;
@@ -76,6 +73,7 @@ struct PCB handle_process_completion_pp(
         memset( &ready_queue[ iHigh ], 0, sizeof( struct PCB ) );
         result.execution_starttime = timestamp;
         result.execution_endtime = timestamp + result.remaining_bursttime;
+        --(*queue_cnt);
     }
 
     return result;
@@ -105,7 +103,6 @@ struct PCB handle_process_arrival_srtp(
         ready_queue[iAdded].execution_starttime = 0;
         ready_queue[iAdded].execution_endtime = 0;
         ready_queue[iAdded].remaining_bursttime = ready_queue[iAdded].total_bursttime;
-        ++(*queue_cnt);
     }
     else
     {
@@ -117,7 +114,6 @@ struct PCB handle_process_arrival_srtp(
         ready_queue[iAdded].execution_starttime = 0;
         ready_queue[iAdded].execution_endtime = 0;
         ready_queue[iAdded].remaining_bursttime = ready_queue[iAdded].total_bursttime;
-        ++(*queue_cnt);
     }
 }
 
@@ -149,6 +145,7 @@ struct PCB handle_process_completion_srtp(
         memset( &ready_queue[ iLow ], 0, sizeof( struct PCB ) );
         result.execution_starttime = timestamp;
         result.execution_endtime = timestamp + result.remaining_bursttime;
+        --(*queue_cnt);
     }
 
     return result;
@@ -169,7 +166,7 @@ static int addRequest(  //we need to clear that if queue is full then what to do
       if ( isNullPcb( request_queue[ i ] ) )
       {
         ++(*queue_cnt);
-        memcpy( &request_queue[ i ], &request, sizeof( request ) );
+        memcpy( &request_queue[ i ], &request, sizeof( struct PCB ) );
         result = i;
         i = QUEUEMAX;
       }
